@@ -13,11 +13,31 @@ func (service *Service) AddItem() *graphql.Field {
 
 	return &graphql.Field{
 		Type: modal.Book,
+		Args: graphql.FieldConfigArgument{
+			"id": &graphql.ArgumentConfig{
+				Type: graphql.NewNonNull(graphql.Int),
+			},
+			"bookName": &graphql.ArgumentConfig{
+				Type: graphql.NewNonNull(graphql.String),
+			},
+			"author": &graphql.ArgumentConfig{
+				Type: graphql.NewNonNull(graphql.String),
+			},
+			"available": &graphql.ArgumentConfig{
+				Type: graphql.NewNonNull(graphql.Boolean),
+			},
+			"location": &graphql.ArgumentConfig{
+				Type: graphql.NewNonNull(graphql.String),
+			},
+			"seller": &graphql.ArgumentConfig{
+				Type: graphql.NewNonNull(graphql.String),
+			},
+		},
 		Resolve: func(p graphql.ResolveParams) (i interface{}, e error) {
 
 			// Database Function Call Here
 			client := database.Client()
-			result, err := client.AddItem()
+			result, err := client.AddItem(p.Args)
 			if err != nil {
 				return nil, err
 			}

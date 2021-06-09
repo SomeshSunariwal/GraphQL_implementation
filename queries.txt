@@ -11,3 +11,18 @@ query {
         }
     }
 }
+
+Add Item 
+
+mutation {
+    AddItem( 
+        id : 1
+        bookName : "book 6"
+        author : "author 6"
+        available : true
+        location : "location 6"
+        seller : "seller 6"
+     ) {
+        id
+    }
+}

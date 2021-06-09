@@ -33,7 +33,8 @@ func Client() Database {
 	}
 }
 
-func (database *Database) AddItem() (string, error) {
+func (database *Database) AddItem(Args map[string]interface{}) (string, error) {
+	fmt.Println(Args)
 	return "", nil
 }
 
