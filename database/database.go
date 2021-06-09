@@ -36,12 +36,15 @@ func Client() Database {
 func (database *Database) AddItem() (string, error) {
 	return "", nil
 }
+
 func (database *Database) UpdateItem() (string, error) {
 	return "", nil
 }
+
 func (database *Database) DeleteItem() (string, error) {
 	return "", nil
 }
+
 func (database *Database) GetItems() ([]modal.BookModal, error) {
 	books := []modal.BookModal{}
 	query := "SELECT id, book_name, author, seller, available from books"
@@ -85,6 +88,7 @@ func (database *Database) GetItems() ([]modal.BookModal, error) {
 
 	return books, nil
 }
+
 func (database *Database) GetItemByID() (string, error) {
 	return "", nil
 }
