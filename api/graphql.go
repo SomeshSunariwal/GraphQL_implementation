@@ -23,7 +23,8 @@ func (handler *Handler) NewGraphQLHandler(context echo.Context) error {
 	// Input Schema
 	schema, err := graphql.NewSchema(
 		graphql.SchemaConfig{
-			Query: handler.service.AddItem(),
+			Query:    GetItem(handler),
+			Mutation: AddItem(handler),
 		},
 	)
 
@@ -37,4 +38,27 @@ func (handler *Handler) NewGraphQLHandler(context echo.Context) error {
 	})
 
 	return context.JSON(http.StatusOK, GraphQLHandler.Data)
+}
+
+// POST, PUT, PATCH,DELETE,
+func AddItem(handler *Handler) *graphql.Object {
+	return graphql.NewObject(graphql.ObjectConfig{
+		Name: "Mutation",
+		Fields: graphql.Fields{
+			"AddItem":    handler.service.AddItem(),
+			"UpdateItem": handler.service.UpdateItem(),
+			"DeleteItem": handler.service.DeleteItem(),
+		},
+	})
+}
+
+// GET
+func GetItem(handler *Handler) *graphql.Object {
+	return graphql.NewObject(graphql.ObjectConfig{
+		Name: "Query",
+		Fields: graphql.Fields{
+			"GetItems":    handler.service.GetItems(),
+			"GetItemByID": handler.service.GetItemByID(),
+		},
+	})
 }
