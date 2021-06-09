@@ -2,17 +2,18 @@ package modal
 
 type BookModal struct {
 	ID           int                 `json:"id"`
-	Book         string              `json:"book"`
-	Author       AuthorModal         `json:"author"`
-	Available    bool                `json :"available"`
+	BookName     string              `json:"bookName"`
+	Details      DetailsModal        `json:"details"`
+	Available    bool                `json:"available"`
 	Availability []AvailabilityModal `json:"availability"`
 }
 
 type AvailabilityModal struct {
 	ID       int    `json:"id"`
-	location string `json:"location"`
+	Location string `json:"location"`
 }
 
-type AuthorModal struct {
-	Name string `json:"name"`
+type DetailsModal struct {
+	Author string `json:"author"`
+	Seller string `json:"seller"`
 }

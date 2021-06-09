@@ -6,6 +6,7 @@ import (
 	"github.com/SomeshSunariwal/GraphQL_implementation/service"
 	"github.com/graphql-go/graphql"
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/gommon/log"
 )
 
 type Handler struct {
@@ -23,8 +24,8 @@ func (handler *Handler) NewGraphQLHandler(context echo.Context) error {
 	// Input Schema
 	schema, err := graphql.NewSchema(
 		graphql.SchemaConfig{
-			Query:    GetItem(handler),
-			Mutation: AddItem(handler),
+			Query:    GETTING(handler),
+			Mutation: ADDING(handler),
 		},
 	)
 
@@ -37,11 +38,16 @@ func (handler *Handler) NewGraphQLHandler(context echo.Context) error {
 		RequestString: requestString,
 	})
 
+	if GraphQLHandler.HasErrors() {
+		log.Info("Error", GraphQLHandler.Errors)
+		return context.JSON(http.StatusOK, GraphQLHandler.Errors)
+	}
+
 	return context.JSON(http.StatusOK, GraphQLHandler.Data)
 }
 
 // POST, PUT, PATCH,DELETE,
-func AddItem(handler *Handler) *graphql.Object {
+func ADDING(handler *Handler) *graphql.Object {
 	return graphql.NewObject(graphql.ObjectConfig{
 		Name: "Mutation",
 		Fields: graphql.Fields{
@@ -53,7 +59,7 @@ func AddItem(handler *Handler) *graphql.Object {
 }
 
 // GET
-func GetItem(handler *Handler) *graphql.Object {
+func GETTING(handler *Handler) *graphql.Object {
 	return graphql.NewObject(graphql.ObjectConfig{
 		Name: "Query",
 		Fields: graphql.Fields{

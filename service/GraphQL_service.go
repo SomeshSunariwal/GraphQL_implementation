@@ -7,16 +7,17 @@ import (
 )
 
 type Service struct {
-	database database.Database
 }
 
 func (service *Service) AddItem() *graphql.Field {
+
 	return &graphql.Field{
 		Type: modal.Book,
 		Resolve: func(p graphql.ResolveParams) (i interface{}, e error) {
 
 			// Database Function Call Here
-			result, err := service.database.AddItem()
+			client := database.Client()
+			result, err := client.AddItem()
 			if err != nil {
 				return nil, err
 			}
@@ -32,7 +33,8 @@ func (service *Service) UpdateItem() *graphql.Field {
 		Resolve: func(p graphql.ResolveParams) (i interface{}, e error) {
 
 			// Database Function Call Here
-			result, err := service.database.UpdateItem()
+			client := database.Client()
+			result, err := client.UpdateItem()
 			if err != nil {
 				return nil, err
 			}
@@ -48,7 +50,8 @@ func (service *Service) DeleteItem() *graphql.Field {
 		Resolve: func(p graphql.ResolveParams) (i interface{}, e error) {
 
 			// Database Function Call Here
-			result, err := service.database.DeleteItem()
+			client := database.Client()
+			result, err := client.DeleteItem()
 			if err != nil {
 				return nil, err
 			}
@@ -64,7 +67,8 @@ func (service *Service) GetItems() *graphql.Field {
 		Resolve: func(p graphql.ResolveParams) (i interface{}, e error) {
 
 			// Database Function Call Here
-			result, err := service.database.GetItems()
+			client := database.Client()
+			result, err := client.GetItems()
 			if err != nil {
 				return nil, err
 			}
@@ -80,7 +84,8 @@ func (service *Service) GetItemByID() *graphql.Field {
 		Resolve: func(p graphql.ResolveParams) (i interface{}, e error) {
 
 			// Database Function Call Here
-			result, err := service.database.GetItemByID()
+			client := database.Client()
+			result, err := client.GetItemByID()
 			if err != nil {
 				return nil, err
 			}

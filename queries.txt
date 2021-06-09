@@ -1,0 +1,13 @@
+Get all the books
+
+query {
+    GetItems {
+        bookName
+        details {
+            author
+        }
+        availability {
+            location
+        }
+    }
+}

@@ -9,22 +9,23 @@ var Book = graphql.NewObject(
 		Name: "Books",
 		Fields: graphql.Fields{
 			"id":           &graphql.Field{Type: graphql.ID},
-			"book":         &graphql.Field{Type: graphql.String},
-			"author":       &graphql.Field{Type: Author},
+			"bookName":     &graphql.Field{Type: graphql.String},
+			"details":      &graphql.Field{Type: Details},
 			"availability": &graphql.Field{Type: graphql.NewList(Availability)},
 			"available":    &graphql.Field{Type: graphql.Boolean},
 		},
-		Description: "Users data",
+		Description: "Book",
 	},
 )
 
-var Author = graphql.NewObject(
+var Details = graphql.NewObject(
 	graphql.ObjectConfig{
-		Name: "Author",
+		Name: "Details",
 		Fields: graphql.Fields{
 			"author": &graphql.Field{Type: graphql.String},
+			"seller": &graphql.Field{Type: graphql.String},
 		},
-		Description: "Users data",
+		Description: "Details",
 	},
 )
 
@@ -32,7 +33,8 @@ var Availability = graphql.NewObject(
 	graphql.ObjectConfig{
 		Name: "Availability",
 		Fields: graphql.Fields{
-			"author": &graphql.Field{Type: graphql.String},
+			"location": &graphql.Field{Type: graphql.String},
+			"id":       &graphql.Field{Type: graphql.Int},
 		},
 		Description: "Users data",
 	},
