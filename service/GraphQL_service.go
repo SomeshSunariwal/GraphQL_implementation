@@ -12,7 +12,7 @@ type Service struct {
 
 func (service *Service) AddItem() *graphql.Field {
 	return &graphql.Field{
-		Type: graphql.NewList(modal.User),
+		Type: modal.Book,
 		Resolve: func(p graphql.ResolveParams) (i interface{}, e error) {
 
 			// Database Function Call Here
@@ -28,7 +28,7 @@ func (service *Service) AddItem() *graphql.Field {
 
 func (service *Service) UpdateItem() *graphql.Field {
 	return &graphql.Field{
-		Type: graphql.NewList(modal.User),
+		Type: modal.Book,
 		Resolve: func(p graphql.ResolveParams) (i interface{}, e error) {
 
 			// Database Function Call Here
@@ -44,7 +44,7 @@ func (service *Service) UpdateItem() *graphql.Field {
 
 func (service *Service) DeleteItem() *graphql.Field {
 	return &graphql.Field{
-		Type: graphql.NewList(modal.User),
+		Type: modal.Book,
 		Resolve: func(p graphql.ResolveParams) (i interface{}, e error) {
 
 			// Database Function Call Here
@@ -60,7 +60,7 @@ func (service *Service) DeleteItem() *graphql.Field {
 
 func (service *Service) GetItems() *graphql.Field {
 	return &graphql.Field{
-		Type: graphql.NewList(modal.User),
+		Type: graphql.NewList(modal.Book),
 		Resolve: func(p graphql.ResolveParams) (i interface{}, e error) {
 
 			// Database Function Call Here
@@ -76,7 +76,7 @@ func (service *Service) GetItems() *graphql.Field {
 
 func (service *Service) GetItemByID() *graphql.Field {
 	return &graphql.Field{
-		Type: graphql.NewList(modal.User),
+		Type: modal.Book,
 		Resolve: func(p graphql.ResolveParams) (i interface{}, e error) {
 
 			// Database Function Call Here
