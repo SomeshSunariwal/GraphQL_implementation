@@ -1,4 +1,4 @@
-Get all the books
+************************************************************      Get all the books
 
 query {
     GetItems {
@@ -12,7 +12,7 @@ query {
     }
 }
 
-Add Book 
+************************************************************     Add Book 
 
 mutation {
     AddItem( 
@@ -30,7 +30,7 @@ mutation {
 }
 
 
-Update Book 
+************************************************************     Update Book 
 
 mutation {
     UpdateItem( 
@@ -41,6 +41,40 @@ mutation {
         details {
             author
             seller
+        }
+    }
+}
+
+************************************************************    GET Book By ID
+
+query {
+    GetItemByID( 
+        bookName : "book 1"
+     ) {
+        bookName
+        details {
+            author
+            seller
+        }
+        availability {
+            location
+        }
+    }
+}
+
+************************************************************    Delete Book By ID
+
+mutation {
+    DeleteItem( 
+        bookName : "book 1"
+     ) {
+        bookName
+        details {
+            author
+            seller
+        }
+        availability {
+            location
         }
     }
 }
