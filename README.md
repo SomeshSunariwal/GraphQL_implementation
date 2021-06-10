@@ -2,6 +2,10 @@
 
 This can be used as a boiler plate for any backend micro-service.
 
-Resource :
+### Postmen Collection
+
+    https://www.getpostman.com/collections/537bf6ba3c441fe92903
+
+### Resource
 
     https://manakuro.medium.com/go-api-with-echo-gorm-and-graphql-1565ad921626
