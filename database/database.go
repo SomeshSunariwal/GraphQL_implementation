@@ -67,8 +67,29 @@ func (database *Database) AddItem(userRequest *modal.PostBook) (modal.BookModal,
 	return book, nil
 }
 
-func (database *Database) UpdateItem() (string, error) {
-	return "", nil
+func (database *Database) UpdateItem(updateValues *modal.PostBook) (modal.BookModal, error) {
+	book := modal.BookModal{}
+	details := modal.DetailsModal{}
+	query := `UPDATE books SET author=COALESCE($1 , author),
+								available=COALESCE($2, available),
+								seller=COALESCE($3, seller) WHERE book_name=$4
+								RETURNING id, book_name, author, seller, available`
+
+	err := database.client.QueryRow(query, updateValues.Author, updateValues.Available, updateValues.Seller, updateValues.BookName).Scan(
+		&book.ID,
+		&book.BookName,
+		&details.Author,
+		&details.Seller,
+		&book.Available,
+	)
+
+	book.Details = details
+
+	if err != nil {
+		return book, err
+	}
+	defer database.client.Close()
+	return book, nil
 }
 
 func (database *Database) DeleteItem() (string, error) {

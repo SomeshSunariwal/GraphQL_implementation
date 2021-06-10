@@ -50,11 +50,29 @@ func (service *Service) AddItem() *graphql.Field {
 func (service *Service) UpdateItem() *graphql.Field {
 	return &graphql.Field{
 		Type: modal.Book,
+		Args: graphql.FieldConfigArgument{
+			"bookName": &graphql.ArgumentConfig{
+				Type: graphql.String,
+			},
+			"author": &graphql.ArgumentConfig{
+				Type: graphql.String,
+			},
+			"available": &graphql.ArgumentConfig{
+				Type: graphql.Boolean,
+			},
+			"seller": &graphql.ArgumentConfig{
+				Type: graphql.String,
+			},
+		},
 		Resolve: func(p graphql.ResolveParams) (i interface{}, e error) {
 
+			userPostRequest, err := validatePostRequest(p.Args)
+			if err != nil {
+				return nil, err
+			}
 			// Database Function Call Here
 			client := database.Client()
-			result, err := client.UpdateItem()
+			result, err := client.UpdateItem(userPostRequest)
 			if err != nil {
 				return nil, err
 			}
@@ -119,20 +137,35 @@ func (service *Service) GetItemByID() *graphql.Field {
 func validatePostRequest(Args map[string]interface{}) (*modal.PostBook, error) {
 	validRequest := &modal.PostBook{}
 
-	bookName := Args["bookName"].(string)
-	validRequest.BookName = &bookName
+	bookName := Args["bookName"]
+	if bookName != nil {
+		bookNewName := bookName.(string)
+		validRequest.BookName = &bookNewName
+	}
 
-	author := Args["author"].(string)
-	validRequest.Author = &author
+	author := Args["author"]
+	if author != nil {
+		authorNew := author.(string)
+		validRequest.Author = &authorNew
+	}
 
-	seller := Args["seller"].(string)
-	validRequest.Seller = &seller
+	seller := Args["seller"]
+	if seller != nil {
+		sellerNew := seller.(string)
+		validRequest.Seller = &sellerNew
+	}
 
-	available := Args["available"].(bool)
-	validRequest.Available = &available
+	available := Args["available"]
+	if available != nil {
+		availableNew := available.(bool)
+		validRequest.Available = &availableNew
+	}
 
-	location := Args["location"].(string)
-	validRequest.Location = &location
+	location := Args["location"]
+	if location != nil {
+		locationNew := location.(string)
+		validRequest.Location = &locationNew
+	}
 
 	return validRequest, nil
 }
