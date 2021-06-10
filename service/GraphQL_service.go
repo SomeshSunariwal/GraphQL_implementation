@@ -119,11 +119,17 @@ func (service *Service) GetItems() *graphql.Field {
 func (service *Service) GetItemByID() *graphql.Field {
 	return &graphql.Field{
 		Type: modal.Book,
+		Args: graphql.FieldConfigArgument{
+			"bookName": &graphql.ArgumentConfig{
+				Type: graphql.NewNonNull(graphql.String),
+			},
+		},
 		Resolve: func(p graphql.ResolveParams) (i interface{}, e error) {
 
+			book_name := p.Args["bookName"].(string)
 			// Database Function Call Here
 			client := database.Client()
-			result, err := client.GetItemByID()
+			result, err := client.GetItemByID(book_name)
 			if err != nil {
 				return nil, err
 			}

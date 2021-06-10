@@ -7,6 +7,7 @@ import (
 	"github.com/SomeshSunariwal/GraphQL_implementation/config"
 	"github.com/SomeshSunariwal/GraphQL_implementation/modal"
 	"github.com/labstack/gommon/log"
+	"github.com/lib/pq"
 	_ "github.com/lib/pq"
 )
 
@@ -120,7 +121,7 @@ func (database *Database) GetItems() ([]modal.BookModal, error) {
 			&book.Available,
 		)
 		book.Details = details
-		availabilityZoneQuery := "SELECT books.id, address FROM availability_zone JOIN books on books.book_name = availability_zone.book_name WHERE books.book_name=$1"
+		availabilityZoneQuery := "SELECT books.id, address FROM availability_zone JOIN books ON books.book_name = availability_zone.book_name WHERE books.book_name=$1"
 		rows, err := database.client.Query(availabilityZoneQuery, book.BookName)
 		if err != nil {
 			log.Info("Error : ", err)
@@ -141,6 +142,38 @@ func (database *Database) GetItems() ([]modal.BookModal, error) {
 	return books, nil
 }
 
-func (database *Database) GetItemByID() (string, error) {
-	return "", nil
+func (database *Database) GetItemByID(bookName string) (modal.BookModal, error) {
+	book := modal.BookModal{}
+	details := modal.DetailsModal{}
+	var stringsArr []sql.NullString
+
+	query := `SELECT books.id, books.book_name, author, seller, available, array_agg(address) FROM books 
+						JOIN availability_zone on availability_zone.book_name = books.book_name 
+						GROUP By books.id, books.book_name 
+						HAVING books.book_name=$1`
+
+	err := database.client.QueryRow(query, bookName).Scan(
+		&book.ID,
+		&book.BookName,
+		&details.Author,
+		&details.Seller,
+		&book.Available,
+		pq.Array(&stringsArr),
+	)
+	availabilityZones := []modal.AvailabilityModal{}
+
+	for _, value := range stringsArr {
+		availabilityZone := modal.AvailabilityModal{}
+		value, _ := value.Value()
+		availabilityZone.Location = value.(string)
+		availabilityZones = append(availabilityZones, availabilityZone)
+	}
+
+	book.Availability = availabilityZones
+
+	book.Details = details
+	if err != nil {
+		return book, err
+	}
+	return book, nil
 }
