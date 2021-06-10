@@ -12,7 +12,7 @@ query {
     }
 }
 
-Add Item 
+Add Book 
 
 mutation {
     AddItem( 
@@ -25,6 +25,22 @@ mutation {
         bookName
         details {
             author
+        }
+    }
+}
+
+
+Update Book 
+
+mutation {
+    UpdateItem( 
+        bookName : "book 1"
+        author : "author 12"
+     ) {
+        bookName
+        details {
+            author
+            seller
         }
     }
 }
