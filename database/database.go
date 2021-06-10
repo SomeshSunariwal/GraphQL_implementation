@@ -62,6 +62,7 @@ func (database *Database) AddItem(userRequest *modal.PostBook) (modal.BookModal,
 	book.Availability = availabilities
 
 	if err != nil {
+		log.Info("Error : ", err)
 		return book, err
 	}
 	defer database.client.Close()
@@ -87,14 +88,49 @@ func (database *Database) UpdateItem(updateValues *modal.PostBook) (modal.BookMo
 	book.Details = details
 
 	if err != nil {
+		log.Info("Error : ", err)
 		return book, err
 	}
 	defer database.client.Close()
 	return book, nil
 }
 
-func (database *Database) DeleteItem() (string, error) {
-	return "", nil
+func (database *Database) DeleteItem(bookName string) (modal.BookModal, error) {
+	book := modal.BookModal{}
+	details := modal.DetailsModal{}
+	var stringsArr []sql.NullString
+
+	query := `WITH delete_books as ( DELETE FROM books WHERE book_name=$1 RETURNING id, book_name, author, seller, available), 
+					delete_availability_zone as ( DELETE FROM availability_zone WHERE book_name= $1 RETURNING book_name, address)
+						SELECT ib.id, ib.book_name, author, seller, available, array_agg(address) FROM delete_books ib
+						JOIN delete_availability_zone iaz ON iaz.book_name = ib.book_name
+						GROUP BY ib.book_name, ib.id, ib.author, ib.seller, ib.available`
+
+	err := database.client.QueryRow(query, bookName).Scan(
+		&book.ID,
+		&book.BookName,
+		&details.Author,
+		&details.Seller,
+		&book.Available,
+		pq.Array(&stringsArr),
+	)
+
+	availabilityZones := []modal.AvailabilityModal{}
+	for _, value := range stringsArr {
+		availabilityZone := modal.AvailabilityModal{}
+		value, _ := value.Value()
+		availabilityZone.Location = value.(string)
+		availabilityZones = append(availabilityZones, availabilityZone)
+	}
+
+	book.Availability = availabilityZones
+	book.Details = details
+
+	if err != nil {
+		log.Info("Error : ", err)
+		return book, nil
+	}
+	return book, nil
 }
 
 func (database *Database) GetItems() ([]modal.BookModal, error) {
@@ -102,7 +138,7 @@ func (database *Database) GetItems() ([]modal.BookModal, error) {
 	query := "SELECT id, book_name, author, seller, available from books"
 
 	rows, err := database.client.Query(query)
-	fmt.Println("..", err)
+
 	if err != nil {
 		log.Info("Error : ", err)
 		return nil, err
@@ -160,8 +196,10 @@ func (database *Database) GetItemByID(bookName string) (modal.BookModal, error) 
 		&book.Available,
 		pq.Array(&stringsArr),
 	)
-	availabilityZones := []modal.AvailabilityModal{}
 
+	defer database.client.Close()
+
+	availabilityZones := []modal.AvailabilityModal{}
 	for _, value := range stringsArr {
 		availabilityZone := modal.AvailabilityModal{}
 		value, _ := value.Value()
@@ -170,9 +208,10 @@ func (database *Database) GetItemByID(bookName string) (modal.BookModal, error) 
 	}
 
 	book.Availability = availabilityZones
-
 	book.Details = details
+
 	if err != nil {
+		log.Info("Error : ", err)
 		return book, err
 	}
 	return book, nil
