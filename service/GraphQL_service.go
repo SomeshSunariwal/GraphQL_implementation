@@ -14,9 +14,6 @@ func (service *Service) AddItem() *graphql.Field {
 	return &graphql.Field{
 		Type: modal.Book,
 		Args: graphql.FieldConfigArgument{
-			"id": &graphql.ArgumentConfig{
-				Type: graphql.NewNonNull(graphql.Int),
-			},
 			"bookName": &graphql.ArgumentConfig{
 				Type: graphql.NewNonNull(graphql.String),
 			},
@@ -34,10 +31,13 @@ func (service *Service) AddItem() *graphql.Field {
 			},
 		},
 		Resolve: func(p graphql.ResolveParams) (i interface{}, e error) {
-
+			userPostRequest, err := validatePostRequest(p.Args)
+			if err != nil {
+				return nil, err
+			}
 			// Database Function Call Here
 			client := database.Client()
-			result, err := client.AddItem(p.Args)
+			result, err := client.AddItem(userPostRequest)
 			if err != nil {
 				return nil, err
 			}
@@ -114,4 +114,25 @@ func (service *Service) GetItemByID() *graphql.Field {
 		},
 		Description: "GetItemByID",
 	}
+}
+
+func validatePostRequest(Args map[string]interface{}) (*modal.PostBook, error) {
+	validRequest := &modal.PostBook{}
+
+	bookName := Args["bookName"].(string)
+	validRequest.BookName = &bookName
+
+	author := Args["author"].(string)
+	validRequest.Author = &author
+
+	seller := Args["seller"].(string)
+	validRequest.Seller = &seller
+
+	available := Args["available"].(bool)
+	validRequest.Available = &available
+
+	location := Args["location"].(string)
+	validRequest.Location = &location
+
+	return validRequest, nil
 }

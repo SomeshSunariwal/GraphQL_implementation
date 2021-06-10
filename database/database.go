@@ -33,9 +33,38 @@ func Client() Database {
 	}
 }
 
-func (database *Database) AddItem(Args map[string]interface{}) (string, error) {
-	fmt.Println(Args)
-	return "", nil
+func (database *Database) AddItem(userRequest *modal.PostBook) (modal.BookModal, error) {
+	book := modal.BookModal{}
+	details := modal.DetailsModal{}
+	availabilities := []modal.AvailabilityModal{}
+	availability := modal.AvailabilityModal{}
+	query := `WITH insert_into_books as ( insert into books (book_name, author, seller, available)
+											VALUES ($1, $2, $3, $4)
+						   					RETURNING id, book_name, author, seller, available), 
+			insert_into_availability_zone as ( insert into availability_zone(book_name, address)
+											VALUES ($1, $5)
+											RETURNING book_name, address)
+			SELECT ib.id, ib.book_name, author, seller, available, address from insert_into_books ib
+			JOIN insert_into_availability_zone iaz ON iaz.book_name = ib.book_name`
+
+	err := database.client.QueryRow(query, userRequest.BookName, userRequest.Author, userRequest.Seller, userRequest.Available, userRequest.Location).Scan(
+		&book.ID,
+		&book.BookName,
+		&details.Author,
+		&details.Seller,
+		&book.Available,
+		&availability.Location,
+	)
+
+	availabilities = append(availabilities, availability)
+	book.Details = details
+	book.Availability = availabilities
+
+	if err != nil {
+		return book, err
+	}
+	defer database.client.Close()
+	return book, nil
 }
 
 func (database *Database) UpdateItem() (string, error) {
@@ -56,6 +85,7 @@ func (database *Database) GetItems() ([]modal.BookModal, error) {
 		log.Info("Error : ", err)
 		return nil, err
 	}
+	defer database.client.Close()
 
 	for rows.Next() {
 		book := modal.BookModal{}

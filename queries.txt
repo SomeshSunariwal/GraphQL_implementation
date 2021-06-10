@@ -16,13 +16,15 @@ Add Item
 
 mutation {
     AddItem( 
-        id : 1
-        bookName : "book 6"
-        author : "author 6"
+        bookName : "book 11"
+        author : "author 11"
+        seller : "seller 11"
         available : true
-        location : "location 6"
-        seller : "seller 6"
+        location : "location 11"
      ) {
-        id
+        bookName
+        details {
+            author
+        }
     }
 }

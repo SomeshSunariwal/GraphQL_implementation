@@ -17,3 +17,11 @@ type DetailsModal struct {
 	Author string `json:"author"`
 	Seller string `json:"seller"`
 }
+
+type PostBook struct {
+	BookName  *string `json:"bookName"`
+	Available *bool   `json:"available"`
+	Location  *string `json:"location"`
+	Author    *string `json:"author"`
+	Seller    *string `json:"seller"`
+}
