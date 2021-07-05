@@ -2,8 +2,6 @@ FROM golang:1.14.2
 
 WORKDIR $GOPATH/src/github.com/SomeshSunariwal/GraphQL_implementation
 
-COPY . .
-
 RUN go install -v ./...
 
 ENV PORT=8080
@@ -12,8 +10,8 @@ ENV PORT=8080
 
 # ENV DB_PASSWORD $DB_PASSWORD
 
+COPY bin/GraphQL_implementation /GraphQL_implementation
+
 EXPOSE 8080
 
 CMD ["make", "run"]
-
-# docker build -e PG_PASSWORD=value
