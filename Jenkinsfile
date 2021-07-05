@@ -15,7 +15,7 @@ pipeline{
     }
 
     stages{
-        stgage("Build"){
+        stage("Build"){
             steps {
                 script {
                     sh "make build"
