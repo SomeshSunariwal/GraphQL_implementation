@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/SomeshSunariwal/GraphQL_implementation/database"
 	"github.com/SomeshSunariwal/GraphQL_implementation/service"
 	"github.com/graphql-go/graphql"
 	"github.com/labstack/echo/v4"
@@ -67,4 +68,13 @@ func GETTING(handler *Handler) *graphql.Object {
 			"GetItemByID": handler.service.GetItemByID(),
 		},
 	})
+}
+
+func DB_Health(c echo.Context) error {
+	client := database.Client()
+	err := client.Health()
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, map[string]string{"DB": "Down"})
+	}
+	return c.JSON(http.StatusOK, map[string]string{"DB": "ok"})
 }

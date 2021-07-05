@@ -2,6 +2,7 @@ package database
 
 import (
 	"database/sql"
+	"errors"
 	"fmt"
 	"os"
 
@@ -61,6 +62,14 @@ func Client() Database {
 	return Database{
 		client: DB_INIT(),
 	}
+}
+
+func (database *Database) Health() error {
+	err := database.client.Ping()
+	if err != nil {
+		return errors.New("DB has Error")
+	}
+	return nil
 }
 
 func (database *Database) AddItem(userRequest *modal.PostBook) (modal.BookModal, error) {
