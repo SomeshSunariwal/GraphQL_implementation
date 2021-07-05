@@ -8,7 +8,7 @@ ENV PORT=8080
 
 # ENV DB_PASSWORD $DB_PASSWORD
 
-COPY bin/GraphQL_implementation /GraphQL_implementation
+COPY bin/GraphQL_implementation .
 
 EXPOSE 8080
 
