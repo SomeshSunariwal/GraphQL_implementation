@@ -9,3 +9,9 @@ This can be used as a boiler plate for any backend micro-service.
 ### Resource
 
     https://manakuro.medium.com/go-api-with-echo-gorm-and-graphql-1565ad921626
+
+## Jenkins File Result
+
+if have any issue? please refer to my jenkins file guide.
+
+![image](image/image.JPG)
