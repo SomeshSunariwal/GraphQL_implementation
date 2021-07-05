@@ -13,3 +13,5 @@ COPY bin/GraphQL_implementation .
 EXPOSE 8080
 
 CMD ["./GraphQL_implementation"]
+
+# docker run -p 8080:8080 --env-file ./env.list someshdokerbox/graphql-boiler-plate
