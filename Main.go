@@ -22,5 +22,9 @@ func main() {
 	e.GET("/", func(c echo.Context) error {
 		return c.String(http.StatusOK, "Hello, World!")
 	})
+
+	e.GET("/check", func(c echo.Context) error {
+		return c.JSON(http.StatusOK, map[string]string{"Response": "Hi!, I am from Docker"})
+	})
 	e.Start(":" + PORT)
 }
