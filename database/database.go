@@ -66,6 +66,9 @@ func Client() Database {
 
 func (database *Database) Health() error {
 	err := database.client.Ping()
+
+	defer database.client.Close()
+
 	if err != nil {
 		return errors.New("DB has Error")
 	}
