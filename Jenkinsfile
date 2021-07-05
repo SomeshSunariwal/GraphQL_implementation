@@ -10,7 +10,7 @@ pipeline{
 
     environment {
         GO111MODULE = 'on'
-        registry = "graphql-boiler-plate"
+        registry = "someshdokerbox/graphql-boiler-plate"
         registryCredential = 'docker-hub' // Create Jenkins Crediential ID named 'docker-hub' (or anything you want and refrenece here)
     }
 
