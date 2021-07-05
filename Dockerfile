@@ -14,4 +14,4 @@ COPY bin/GraphQL_implementation /GraphQL_implementation
 
 EXPOSE 8080
 
-CMD ["make", "run"]
+CMD ["./GraphQL_implementation"]

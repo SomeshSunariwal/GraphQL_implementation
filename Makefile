@@ -1,5 +1,8 @@
-run:
-	go run ./bin/GraphQL_implementation
+exec:
+	bin/GraphQL_implementation
 
 build:
-	go build -o ./bin/
+	go build -o bin/
+
+run:
+	go run Main.go
