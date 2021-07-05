@@ -2,8 +2,6 @@ FROM golang:1.14.2
 
 WORKDIR $GOPATH/src/github.com/SomeshSunariwal/GraphQL_implementation
 
-RUN go install -v ./...
-
 ENV PORT=8080
 
 # ARG DB_PASSWORD
