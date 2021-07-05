@@ -3,8 +3,12 @@ dockerImage = ''
 pipeline{
 
     agent any
+    tools {
+        go 'go-1.14.1'
+    }
 
     environment {
+        GO111MODULE = 'on'
         registry = "someshdokerbox/test"
         registryCredential = 'docker-hub'
     }
@@ -17,7 +21,7 @@ pipeline{
                 }
             }
         }
-        stage("0Build Docker Image") {
+        stage("Build Docker Image") {
             steps {
                 script {
                     dockerImage = docker.build registry + ":$BUILD_NUMBER"
