@@ -3,6 +3,7 @@ dockerImage = ''
 pipeline{
 
     agent any
+    
     tools {
         go 'go-1.14.1'
     }
