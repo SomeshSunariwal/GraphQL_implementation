@@ -3,6 +3,7 @@ package database
 import (
 	"database/sql"
 	"fmt"
+	"os"
 
 	"github.com/SomeshSunariwal/GraphQL_implementation/config"
 	"github.com/SomeshSunariwal/GraphQL_implementation/modal"
@@ -15,10 +16,17 @@ type Database struct {
 	client *sql.DB
 }
 
+type Config struct {
+	Config config.ENV_CONFIG
+}
+
 func DB_INIT() *sql.DB {
+	//GETTING Config Details from Environment Variable
+	databaseConfig := DatabaseConfig()
+
 	connectionString := fmt.Sprintf("host=%s port=%d user=%s "+
 		"password=%s dbname=%s sslmode='disable'",
-		config.HOST, config.PG_PORT, config.PG_USER, config.PG_PASSWORD, config.PG_DATABASE_NAME)
+		databaseConfig.HOST, 5432, databaseConfig.PG_USER, databaseConfig.PG_PASSWORD, databaseConfig.PG_DATABASE_NAME)
 	db, err := sql.Open("postgres", connectionString)
 	if err != nil {
 		log.Info("ERROR : ", err)
@@ -26,6 +34,27 @@ func DB_INIT() *sql.DB {
 	}
 
 	return db
+}
+
+func DatabaseConfig() *config.ENV_CONFIG {
+	HOST := os.Getenv("HOST")
+	PG_USER := os.Getenv("PG_USER")
+	PG_PASSWORD := os.Getenv("PG_PASSWORD")
+	PG_DATABASE_NAME := os.Getenv("PG_DATABASE_NAME")
+	if HOST == "" || PG_USER == "" || PG_PASSWORD == "" || PG_DATABASE_NAME == "" {
+		return &config.ENV_CONFIG{
+			HOST:             config.HOST,
+			PG_USER:          config.PG_USER,
+			PG_PASSWORD:      config.PG_PASSWORD,
+			PG_DATABASE_NAME: config.PG_DATABASE_NAME,
+		}
+	}
+	return &config.ENV_CONFIG{
+		HOST:             HOST,
+		PG_USER:          PG_USER,
+		PG_PASSWORD:      PG_PASSWORD,
+		PG_DATABASE_NAME: PG_DATABASE_NAME,
+	}
 }
 
 func Client() Database {

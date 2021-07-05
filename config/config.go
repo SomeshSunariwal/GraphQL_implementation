@@ -13,3 +13,10 @@ const (
 
 	PG_DATABASE_NAME = "test"
 )
+
+type ENV_CONFIG struct {
+	HOST             string
+	PG_USER          string
+	PG_PASSWORD      string
+	PG_DATABASE_NAME string
+}
