@@ -15,3 +15,9 @@ This can be used as a boiler plate for any backend micro-service.
 if have any issue? please refer to my jenkins file guide.
 
 ![image](image/image.JPG)
+
+## Service Network Flow
+
+Kubernetes files available in Kubernetes-ArgoCD-Guide/graphQL_application_example
+
+![image2](image/image2.JPG)
